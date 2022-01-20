@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import AddBoxIcon from "@material-ui/icons/AddBox";
+import React, { useState } from 'react';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 function CreateArea(props) {
   const [note, setNote] = useState({
-    title: "",
-    content: ""
+    title: '',
+    content: '',
+    color: '#f5ba13',
   });
 
   function handleChange(event) {
@@ -13,48 +14,61 @@ function CreateArea(props) {
     setNote((prevNotes) => {
       return {
         ...prevNotes,
-        [name]: value
+        [name]: value,
       };
     });
   }
 
   function submitNote(event) {
+    event.preventDefault();
+
+    if (note.title === '' || note.content === '' || note.color === '') {
+      alert('You must add a title and content!');
+      return;
+    }
+
     props.onAdd(note);
     setNote({
-      title: "",
-      content: ""
+      title: '',
+      content: '',
+      color: '#f5ba13',
     });
-    event.preventDefault();
   }
 
   return (
-    <div className="inputPart">
-      <form className="create-form">
-        <input
-          onChange={handleChange}
-          value={note.title}
-          name="title"
-          type="text"
-          placeholder="Title"
-        />
+    <div className='inputContainer'>
+      <div className='inputPart'>
+        <form className='create-form'>
+          <input
+            onChange={handleChange}
+            value={note.title}
+            name='title'
+            type='text'
+            placeholder='Title'
+          />
 
-        <br />
+          <textarea
+            onChange={handleChange}
+            type='text'
+            name='content'
+            value={note.content}
+            placeholder='Take a note...'
+          />
 
-        <textarea
-          onChange={handleChange}
-          type="text"
-          name="content"
-          value={note.content}
-          placeholder="Take a note..."
-          rows="3"
-        />
+          <div className='bottom'>
+            <input
+              type='color'
+              name='color'
+              value={note.color}
+              onChange={handleChange}
+            />
 
-        <br />
-
-        <button className="addIcon" onClick={submitNote}>
-          <AddBoxIcon />
-        </button>
-      </form>
+            <button className='addIcon' onClick={submitNote}>
+              <AddBoxIcon fontSize='large' style={{ fill: note.color }} />
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
